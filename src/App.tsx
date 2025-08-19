@@ -1,35 +1,35 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Header from "./components/Header";
+import Hero from "./components/Hero";
+import Articles from "./components/Articles";
+import DynamicList from "./components/DynamicList";
+import ToggleSection from "./components/ToggleSection";
+import AnimationSection from "./components/AnimationSection";
+import Media from "./components/Media";
+import ContactForm from "./components/ContactForm";
+import CollapsibleInfo from "./components/CollapsibleInfo";
+import Sidebar from "./components/Sidebar";
+import Footer from "./components/Footer";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+export default function App() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      <main className="flex flex-col lg:flex-row gap-6 container mx-auto p-6">
+        <div className="flex-1 space-y-8">
+          <Hero />
+          <Articles />
+          <DynamicList />
+          <ToggleSection />
+          <AnimationSection />
+          <Media />
+          <ContactForm />
+          <CollapsibleInfo />
+        </div>
+        <aside className="w-full lg:w-1/3">
+          <Sidebar />
+        </aside>
+      </main>
+      <Footer />
+    </div>
+  );
 }
-
-export default App
