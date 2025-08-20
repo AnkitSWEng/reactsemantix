@@ -1,23 +1,24 @@
-// api/visitorCounter.ts
-import { IncomingMessage, ServerResponse } from "http";
+import type { IncomingMessage, ServerResponse } from "http";
 
 export default async function handler(_req: IncomingMessage, res: ServerResponse) {
-  const gistId = process.env.GIST_ID;
-  const token = process.env.GITHUB_TOKEN;
-
-  if (!gistId || !token) {
-    res.statusCode = 500;
-    res.setHeader("Content-Type", "application/json");
-    res.end(JSON.stringify({ error: "Missing GIST_ID or GITHUB_TOKEN" }));
-    return;
-  }
+  const gistId = process.env.GIST_ID!;
+  const token = process.env.GITHUB_TOKEN!;
 
   try {
     // 1. Get current count
     const gistRes = await fetch(`https://api.github.com/gists/${gistId}`, {
       headers: { Authorization: `token ${token}` },
     });
-    const gistData = await gistRes.json();
+
+    // 👇 tell TS what shape we expect
+    type GistResponse = {
+      files: {
+        [key: string]: { content: string };
+      };
+    };
+
+    const gistData: GistResponse = (await gistRes.json()) as GistResponse;
+
     const fileContent = JSON.parse(gistData.files["counter.json"].content);
 
     // 2. Increment
@@ -40,9 +41,12 @@ export default async function handler(_req: IncomingMessage, res: ServerResponse
     res.statusCode = 200;
     res.setHeader("Content-Type", "application/json");
     res.end(JSON.stringify({ count: fileContent.count }));
-  } catch (error: any) {
+  } catch (error) {
     res.statusCode = 500;
-    res.setHeader("Content-Type", "application/json");
-    res.end(JSON.stringify({ error: error.message }));
+    res.end(
+      JSON.stringify({
+        error: (error as Error).message,
+      })
+    );
   }
 }
