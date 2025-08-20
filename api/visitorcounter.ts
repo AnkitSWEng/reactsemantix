@@ -1,7 +1,7 @@
 // api/visitorCounter.ts
 import { IncomingMessage, ServerResponse } from "http";
 
-export default async function handler(req: IncomingMessage, res: ServerResponse) {
+export default async function handler(_req: IncomingMessage, res: ServerResponse) {
   const gistId = process.env.GIST_ID;
   const token = process.env.GITHUB_TOKEN;
 
